@@ -23,4 +23,16 @@ class Contact {
         $stmt = $this->db->pdo->prepare("UPDATE contacts SET name = ?, surname = ?, email = ? WHERE id = ?");
         $stmt->execute([$name, $surname, $email, $id]);
     }
+    public function search($query) {
+        $stmt = $this->db->pdo->prepare("SELECT * FROM contacts WHERE name LIKE ? OR surname LIKE ? OR email LIKE ? ORDER BY surname, name ASC");
+        $like = "%$query%";
+        $stmt->execute([$like, $like, $like]);
+        return $stmt->fetchAll();
+    }
+    public function searchByEmail($query) {
+        $stmt = $this->db->pdo->prepare("SELECT * FROM contacts WHERE email LIKE ? ORDER BY surname, name ASC");
+        $like = "%$query%";
+        $stmt->execute([$like]);
+        return $stmt->fetchAll();
+    }
 }

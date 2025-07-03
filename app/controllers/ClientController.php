@@ -1,4 +1,10 @@
 <?php
+// session_start(); // Already started in index.php, so do not start again here
+if (!isset($_SESSION['user_id'])) {
+    header('Location: /basic_data_capturing_app/landing.php');
+    exit;
+}
+
 require_once __DIR__ . '/../models/Database.php';
 require_once __DIR__ . '/../models/Client.php';
 require_once __DIR__ . '/../models/ClientContact.php';

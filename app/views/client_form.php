@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Client Form</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/basic_data_capturing_app/public/css/style.css">
     <script src="/js/validation.js"></script>
 </head>
 <body>
@@ -47,7 +47,7 @@
                                 <td style="text-align:left;">
                                     <?= htmlspecialchars($contact['email']) ?>
                                 </td>
-                                <td><a href="?controller=client&action=edit&id=<?= $client['id'] ?>&unlink_contact_id=<?= $contact['id'] ?>">Unlink</a></td>
+                                <td><a href="?controller=client&action=edit&id=<?= $client['id'] ?>&unlink_contact_id=<?= $contact['id'] ?>" onclick="return confirm('Are you sure you want to unlink this contact?');">Unlink</a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -117,6 +117,7 @@
     var linkContactBtn = document.getElementById('linkContactBtn');
     if (linkContactBtn) {
         linkContactBtn.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent form submission!
             var select = document.getElementById('link_contact_id');
             var contactId = select.value;
             var clientId = <?= isset($client) ? (int)$client['id'] : 0 ?>;
@@ -125,6 +126,7 @@
                 alert('Invalid client or contact selection.');
                 return;
             }
+            if (!confirm('Are you sure you want to link this contact to the client?')) return;
             fetch('public/ajax_link.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -132,29 +134,9 @@
             })
             .then(response => response.json())
             .then(data => {
+                alert('AJAX response: ' + JSON.stringify(data)); // DEBUG
                 if (data.success) {
-                    // Remove the contact from the dropdown
-                    select.remove(select.selectedIndex);
-                    // Add the new contact to the table
-                    var tbody = document.querySelector('#tab-contacts tbody');
-                    if (!tbody) {
-                        // If table doesn't exist, create it
-                        var tableHtml = '<table><thead><tr><th style="text-align:left;">Contact Full Name</th><th style="text-align:left;">Email</th><th></th></tr></thead><tbody></tbody></table>';
-                        document.querySelector('#tab-contacts').insertAdjacentHTML('afterbegin', tableHtml);
-                        tbody = document.querySelector('#tab-contacts tbody');
-                        // Remove "No contacts found." message if present
-                        var noContacts = document.querySelector('#tab-contacts p');
-                        if (noContacts) noContacts.remove();
-                    }
-                    // Parse contactText to get name and email
-                    var match = contactText.match(/^(.*?) \((.*?)\)$/);
-                    var fullName = match ? match[1] : contactText;
-                    var email = match ? match[2] : '';
-                    var newRow = document.createElement('tr');
-                    newRow.innerHTML = '<td style="text-align:left;">' + fullName + '</td>' +
-                        '<td style="text-align:left;">' + email + '</td>' +
-                        '<td><a href="?controller=client&action=edit&id=' + clientId + '&unlink_contact_id=' + contactId + '">Unlink</a></td>';
-                    tbody.appendChild(newRow);
+                    window.location.href = "?controller=client&action=edit&id=" + clientId + "#tab-contacts";
                 } else if (data.error) {
                     alert(data.error);
                 } else {

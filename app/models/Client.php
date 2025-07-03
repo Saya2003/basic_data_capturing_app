@@ -80,4 +80,18 @@ class Client {
             throw new ClientException("Failed to retrieve client: " . $e->getMessage(), $e->getCode(), $e);
         }
     }
+
+    public function search($query) {
+        $stmt = $this->db->pdo->prepare("SELECT * FROM clients WHERE name LIKE ? OR client_code LIKE ? ORDER BY name ASC");
+        $like = "%$query%";
+        $stmt->execute([$like, $like]);
+        return $stmt->fetchAll();
+    }
+
+    public function searchByClientCode($query) {
+        $stmt = $this->db->pdo->prepare("SELECT * FROM clients WHERE client_code LIKE ? ORDER BY name ASC");
+        $like = "%$query%";
+        $stmt->execute([$like]);
+        return $stmt->fetchAll();
+    }
 }

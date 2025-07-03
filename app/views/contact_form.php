@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Contact Form</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/basic_data_capturing_app/public/css/style.css">
     <script src="/js/validation.js"></script>
 </head>
 <body>
@@ -117,11 +117,11 @@
             var select = document.getElementById('link_client_id');
             var clientId = select.value;
             var contactId = <?= isset($contact) ? (int)$contact['id'] : 0 ?>;
-            console.log('Attempting to link: clientId=' + clientId + ', contactId=' + contactId);
             if (!clientId || !contactId) {
                 alert('Invalid client or contact selection.');
                 return;
             }
+            if (!confirm('Are you sure you want to link this client to the contact?')) return;
             fetch('public/ajax_link_contact.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
