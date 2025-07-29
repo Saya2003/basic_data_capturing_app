@@ -18,9 +18,18 @@
         </div>
         <div id="tab-general" class="tab-content active">
             <?php if (!empty($error)): ?><div class="error"><?= htmlspecialchars($error) ?></div><?php endif; ?>
-            <label>Name: <input type="text" name="name" value="<?= isset($contact) ? htmlspecialchars($contact['name']) : '' ?>" required></label><br>
-            <label>Surname: <input type="text" name="surname" value="<?= isset($contact) ? htmlspecialchars($contact['surname']) : '' ?>" required></label><br>
-            <label>Email: <input type="email" name="email" value="<?= isset($contact) ? htmlspecialchars($contact['email']) : '' ?>" required></label><br>
+            <div class="form-group">
+                <label>Name: <input type="text" name="name" id="contactName" value="<?= isset($contact) ? htmlspecialchars($contact['name']) : '' ?>" required></label>
+                <div id="nameError" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label>Surname: <input type="text" name="surname" id="contactSurname" value="<?= isset($contact) ? htmlspecialchars($contact['surname']) : '' ?>" required></label>
+                <div id="surnameError" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label>Email: <input type="email" name="email" id="contactEmail" value="<?= isset($contact) ? htmlspecialchars($contact['email']) : '' ?>" required></label>
+                <div id="emailError" class="error-message"></div>
+            </div>
             <button type="submit">Save</button>
         </div>
         <?php if (isset($contact)): ?>

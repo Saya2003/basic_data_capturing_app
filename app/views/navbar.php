@@ -18,16 +18,16 @@
         <li style="flex:1;"></li>
         <li>
             <form id="searchForm" style="display:inline;position:relative;">
-                <input type="text" id="searchInput" placeholder="Search clients or contacts..." style="padding-left:30px;">
-                <select id="searchType" style="position:absolute;right:0;top:0;height:32px;">
+                <input type="text" id="searchInput" placeholder="Search clients or contacts..." style="padding-left:24px;padding-right:65px;height:28px;box-sizing:border-box;">
+                <select id="searchType" style="position:absolute;right:2px;top:50%;transform:translateY(-50%);height:24px;width:60px;font-size:11px;padding:0 2px;border-radius:3px;">
                     <option value="all">All</option>
                     <option value="clients">Clients</option>
                     <option value="contacts">Contacts</option>
-                    <option value="client_code">Client Code</option>
+                    <option value="client_code">Code</option>
                     <option value="email">Email</option>
                 </select>
-                <button type="submit" id="searchBtn" style="position:absolute;left:0;top:0;background:none;border:none;cursor:pointer;padding:8px;">
-                    <span style="font-size:18px;">🔍</span>
+                <button type="submit" id="searchBtn" style="position:absolute;left:0;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:4px;line-height:1;">
+                    <span style="font-size:14px;">🔍</span>
                 </button>
                 <div id="searchResults" style="position:absolute;top:38px;left:0;width:300px;z-index:1000;background:#fff;border:1px solid #ccc;display:none;"></div>
             </form>

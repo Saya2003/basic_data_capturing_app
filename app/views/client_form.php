@@ -18,7 +18,10 @@
         </div>
         <div id="tab-general" class="tab-content active">
             <?php if (!empty($error)): ?><div class="error"><?= htmlspecialchars($error) ?></div><?php endif; ?>
-            <label>Name: <input type="text" name="name" value="<?= isset($client) ? htmlspecialchars($client['name']) : '' ?>" required></label><br>
+            <div class="form-group">
+                <label>Name: <input type="text" name="name" id="clientName" value="<?= isset($client) ? htmlspecialchars($client['name']) : '' ?>" required></label>
+                <div id="nameError" class="error-message"></div>
+            </div>
             <?php if (isset($client)): ?>
                 <label>Client code: <input type="text" value="<?= htmlspecialchars($client['client_code']) ?>" readonly></label><br>
             <?php endif; ?>

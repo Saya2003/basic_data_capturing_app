@@ -17,22 +17,49 @@ class ContactController {
         include __DIR__ . '/../views/contacts_list.php';
     }
     public function create() {
-        $error = '';
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = trim(strip_tags($_POST['name'] ?? ''));
             $surname = trim(strip_tags($_POST['surname'] ?? ''));
             $email = trim(strip_tags($_POST['email'] ?? ''));
-            if (!$name || !$surname || !$email) {
-                $error = 'All fields are required.';
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $error = 'Invalid email address.';
-            } else {
-                try {
-                    $id = $this->contact->create($name, $surname, $email);
+            
+            try {
+                if (!$name || !$surname || !$email) {
+                    throw new Exception('All fields are required.');
+                }
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    throw new Exception('Invalid email address.');
+                }
+
+                $id = $this->contact->create($name, $surname, $email);
+                
+                // Check if it's an AJAX request
+                if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+                    strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                    header('Content-Type: application/json');
+                    echo json_encode([
+                        'success' => true,
+                        'redirect' => "/basic_data_capturing_app/index.php?controller=contact&action=edit&id=" . $id
+                    ]);
+                    exit;
+                } else {
                     header('Location: ?controller=contact&action=edit&id=' . $id);
                     exit;
-                } catch (PDOException $e) {
-                    $error = 'Email must be unique.';
+                }
+            } catch (PDOException $e) {
+                $error = 'Email must be unique.';
+                if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+                    strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                    header('Content-Type: application/json');
+                    echo json_encode(['success' => false, 'error' => $error]);
+                    exit;
+                }
+            } catch (Exception $e) {
+                $error = $e->getMessage();
+                if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+                    strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                    header('Content-Type: application/json');
+                    echo json_encode(['success' => false, 'error' => $error]);
+                    exit;
                 }
             }
         }

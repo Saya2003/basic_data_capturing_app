@@ -12,22 +12,20 @@
     <?php if (empty($clients)): ?>
         <p>No clients found.</p>
     <?php else: ?>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Client code</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($clients as $client): ?>
-                <tr>
-                    <td><?= htmlspecialchars($client['name']) ?></td>
-                    <td><?= htmlspecialchars($client['client_code']) ?></td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <div class="search-results">
+            <?php foreach ($clients as $client): ?>
+            <div class="result-card">
+                <div class="result-field">
+                    <span class="field-label">Name:</span>
+                    <span class="field-value"><?= htmlspecialchars($client['name']) ?></span>
+                </div>
+                <div class="result-field">
+                    <span class="field-label">Client code:</span>
+                    <span class="field-value"><?= htmlspecialchars($client['client_code']) ?></span>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
     <?php endif; ?>
     <h2>Contacts</h2>
     <?php if (empty($contacts)): ?>
